@@ -1,0 +1,15 @@
+config:
+  target: "ws://127.0.0.1:8080"
+  phases:
+    - duration: 300
+      arrivalRate: 1
+      rampTo: 50
+
+scenarios:
+  - name: "WebSocket test"
+    engine: "ws"
+    flow:
+      - loop:
+          - send: "hello from the other side"
+          - think: 5
+        count: 100
