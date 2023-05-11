@@ -1,35 +1,49 @@
+const express = require('express');
 const WebSocket = require('ws');
 
-const server = new WebSocket.Server({ port: 4000 });
 console.clear()
-var arr = [] 
-var connectionCount = 0;
-var msgArr = []
 
-server.on('connection', (socket) => {
-    socket.on('message', (msg)=>{ 
-        msgArr.push(msg.toString);
-        console.log('Client msg count: ' + msgArr.length);
-    })
+var clientList = []
+const app = express();
+var data = "";
 
-    arr.push(socket);
-    connectionCount++;
-    console.log('Client connected count: ' + arr.length);
 
-    // Send the current time to the client every second
-    const interval = setInterval(() => {
-        
+const server = app.listen(4000, () => {
+    console.log('Server is listening on port 4000');
+});
 
-        var date = new Date();
+const wss = new WebSocket.Server({ server });
 
-        var dateStr = `${date.getFullYear()}/${date.getMonth()}/${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-        socket.send(JSON.stringify("hello"));
+app.use(express.json());
 
-    }, 1000);
+app.get('/api', (req, res) => {
+    data = req.query.data;
+    if (!data) {
+        res.json("failed please pass the query data as https://xxx.xxx?data=XXX")
+        return;
+    }
+    console.log("Received Data: " + data)
+    clientList.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(data)
+        } else {
+            clientList = clientList.filter((item) => item != client);
+        }
+    });
+    res.json(data);
+});
 
-    socket.on('close', () => {
-        arr = arr.filter((item) => item != socket);
-        console.log('Client disconnected count: ' + arr.length);
-        clearInterval(interval);
+wss.on('connection', (ws) => {
+    clientList.push(ws)
+    if(data) ws.send(data)
+    console.log('Client connected count: ' + clientList.length);
+
+
+    ws.on('close', () => {
+        clientList = clientList.filter((item) => item != ws);
+        console.log('Client disconnected count: ' + clientList.length);
+
     });
 });
+
+
