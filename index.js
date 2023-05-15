@@ -13,6 +13,32 @@ const MAX_CONNECTIONS = isNaN(connectionNumber) || connectionNumber === 0
   ? 600
   : connectionNumber;
 
+const initConnectionNumber = Number(prompt('Enter Initial Connection: '));
+const INIT_CONNECTIONS = isNaN(initConnectionNumber) || initConnectionNumber === 0
+  ? 0
+  : initConnectionNumber;
+
+  const addDuration = Number(prompt('Enter Socket Add Interval in ms: '));
+  const ADD_INTERVAL = isNaN(addDuration) || addDuration === 0
+    ? 1000
+    : addDuration;
+
+
+  const refreshInterval = Number(prompt('Enter Msg Refresh interval in ms: '));
+  const REFRESH_INTERVAL = isNaN(refreshInterval) || refreshInterval === 0
+    ? 500
+    : refreshInterval;
+
+
+
+  for(var i = 0; i < INIT_CONNECTIONS; i++){
+    const id = wsArr.length;
+    const ws = new WebSocket(SERVER_URL);
+    const wo = createWebSocket(id, ws);
+  
+    wsArr.push(wo);
+  
+  }
 const intervalId = setInterval(() => {
   if (wsArr.length >= MAX_CONNECTIONS) {
     return clearInterval(intervalId);
@@ -33,7 +59,7 @@ const intervalId = setInterval(() => {
   //   }
   // }, MAX_CONNECTIONS * 100);
 
-}, 100);
+}, ADD_INTERVAL);
 
 
 function createWebSocket(id, ws) {
@@ -88,7 +114,7 @@ setInterval(() => {
   console.log("all error datas: ")
 
   printCount(wsArr.map((w) => w.errMsg));
-}, 50);
+}, REFRESH_INTERVAL);
 
 function removeClient(wo) {
   // wsArr = wsArr.filter((item) => item !== wo);
