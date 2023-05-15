@@ -1,6 +1,8 @@
 const express = require('express');
 const WebSocket = require('ws');
 
+const PORT  = 4000;
+
 console.clear()
 
 var clientList = []
@@ -8,8 +10,8 @@ const app = express();
 var data = "";
 
 
-const server = app.listen(4000, () => {
-    console.log('Server is listening on port 4000');
+const server = app.listen(PORT, () => {
+    console.log('Server is listening on port ' + PORT);
 });
 
 const wss = new WebSocket.Server({ server });
@@ -26,8 +28,10 @@ app.get('/api', (req, res) => {
     clientList.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
             client.send(data)
-        } else {
-            clientList = clientList.filter((item) => item != client);
+        }else if(client.readyState === WebSocket.CLOSED){
+            console.log('socket is already closed' );
+        }else{
+            console.log('cannot send data' );
         }
     });
     res.json(data);
@@ -40,10 +44,12 @@ wss.on('connection', (ws) => {
 
 
     ws.on('close', () => {
+        ws.close();
         clientList = clientList.filter((item) => item != ws);
         console.log('Client disconnected count: ' + clientList.length);
 
     });
 });
+
 
 
