@@ -1,7 +1,7 @@
 const WebSocket = require('ws');
 const prompt = require('prompt-sync')({ sigint: true });
 
-const SERVER_URL = 'ws://localhost';
+const SERVER_URL = 'ws://192.168.100.120';
 
 let wsArr = [];
 let msg = "";
