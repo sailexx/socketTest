@@ -1,11 +1,14 @@
 const WebSocket = require('ws');
 const prompt = require('prompt-sync')({ sigint: true });
 
-const SERVER_URL = 'ws://192.168.100.120';
+
 
 let wsArr = [];
 let msg = "";
 let errorMsg = "";
+const contentId = Number(prompt('Enter content Id: '));
+
+const SERVER_URL = `wss://socket1.test.dev.ncv.jp/socket/general/${contentId}/-/`;
 
 
 const connectionNumber = Number(prompt('Enter MAX_CONNECTIONS: '));
