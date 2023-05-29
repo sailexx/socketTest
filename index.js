@@ -6,6 +6,7 @@ const prompt = require('prompt-sync')({ sigint: true });
 let wsArr = [];
 let msg = "";
 let errorMsg = "";
+
 const contentId = Number(prompt('Enter content Id: '));
 
 const SERVER_URL = `wss://socket1.test.dev.ncv.jp/socket/general/${contentId}/-/`;
@@ -148,4 +149,3 @@ function printCount(arr) {
     if(item !== "") console.log(`${item} * ${count}`);
   }
 }
-
