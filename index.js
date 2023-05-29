@@ -88,10 +88,16 @@ function createWebSocket(id, ws) {
     }
   });
 
-  ws.on('close', () => { });
+  ws.on('close', () => { 
+    removeClient(wo);
+  });
 
   return wo;
 
+}
+
+function removeClient(wo) {
+  wsArr = wsArr.filter((item) => item !== wo);
 }
 
 
