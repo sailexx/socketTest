@@ -73,6 +73,7 @@ function createWebSocket(id, ws) {
 
   ws.on('message', (message) => {
     wo.hasError = false;
+        wo.errMsg = "";
     wo.newMsg = message.toString();
     if (msg !== message.toString()) {
       msg = message.toString();
