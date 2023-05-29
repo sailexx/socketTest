@@ -3,7 +3,7 @@ const WebSocket = require('ws');
 
 const CONNECTION_TIMEOUT = 5000;
 // const SERVER_URL = 'wss://trd1.dev.ncv.jp/ws';
-const SERVER_URL = 'ws://127.0.0.1:8080';
+const SERVER_URL = 'wss://socket1.test.dev.ncv.jp/socket/general/2053/-/';
 let MAX_CONNECTIONS = 200;
 let wsArr = [];
 let count  = 0;
